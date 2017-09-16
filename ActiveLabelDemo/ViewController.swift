@@ -16,13 +16,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let customType = ActiveType.custom(pattern: "\\sare\\b") //Looks for "are"
-        let customType2 = ActiveType.custom(pattern: "\\sit\\b") //Looks for "it"
-        let customType3 = ActiveType.custom(pattern: "\\ssupports\\b") //Looks for "supports"
+        let customType = ActiveType.custom(pattern: "\\sare\\b", range: nil) //Looks for "are"
+        let customType2 = ActiveType.custom(pattern: "\\sit\\b", range: nil) //Looks for "it"
+        let customType3 = ActiveType.custom(pattern: "\\ssupports\\b", range: nil) //Looks for "supports"
+        let customType4 = ActiveType.custom(pattern: "\\scustom\\b", range: NSRange(location: 275, length: 7))
 
         label.enabledTypes.append(customType)
         label.enabledTypes.append(customType2)
         label.enabledTypes.append(customType3)
+        label.enabledTypes.append(customType4)
 
         label.urlMaximumLength = 31
 
@@ -31,7 +33,9 @@ class ViewController: UIViewController {
             " this one: http://optonaut.co. Now it also supports custom patterns -> are\n\n" +
                 "Let's trim a long link: \nhttps://twitter.com/twicket_app/status/649678392372121601" +
                 "\n\n" +
-                "Now it also supports simple links: google.com"
+                "Now it also supports simple links: google.com" +
+                "\n\n" +
+                "and custom ranges"
             label.numberOfLines = 0
             label.lineSpacing = 4
             
@@ -62,10 +66,14 @@ class ViewController: UIViewController {
                 
                 return atts
             }
+            
+            label.customColor[customType4] = UIColor.yellow
+            label.customSelectedColor[customType4] = UIColor.green
 
             label.handleCustomTap(for: customType) { self.alert("Custom type", message: $0) }
             label.handleCustomTap(for: customType2) { self.alert("Custom type", message: $0) }
             label.handleCustomTap(for: customType3) { self.alert("Custom type", message: $0) }
+            label.handleCustomTap(for: customType4) { self.alert("Custom type", message: $0) }
         }
 
         label.frame = CGRect(x: 20, y: 40, width: view.frame.width - 40, height: 300)
