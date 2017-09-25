@@ -11,11 +11,11 @@ import XCTest
 
 extension ActiveElement: Equatable {}
 
-func ==(a: ActiveElement, b: ActiveElement) -> Bool {
+public func ==(a: ActiveElement, b: ActiveElement) -> Bool {
     switch (a, b) {
     case (.mention(let a), .mention(let b)) where a == b: return true
     case (.hashtag(let a), .hashtag(let b)) where a == b: return true
-    case (.url(let a), .url(let b)) where a == b: return true
+    case (.url(let a), .url(let b)) where a.original == b.original: return true
     case (.custom(let a), .custom(let b)) where a == b: return true
     default: return false
     }
@@ -24,7 +24,7 @@ func ==(a: ActiveElement, b: ActiveElement) -> Bool {
 class ActiveTypeTests: XCTestCase {
     
     let label = ActiveLabel()
-    let customEmptyType = ActiveType.custom(pattern: "")
+    let customEmptyType = ActiveType.custom(pattern: "", range: nil)
     
     var activeElements: [ActiveElement] {
         return label.activeElements.flatMap({$0.1.flatMap({$0.element})})
@@ -35,7 +35,7 @@ class ActiveTypeTests: XCTestCase {
         switch currentElement {
         case .mention(let mention): return mention
         case .hashtag(let hashtag): return hashtag
-        case .url(let url, _): return url
+        case .url(let url, _, _): return url
         case .custom(let element): return element
         }
     }
@@ -201,7 +201,7 @@ class ActiveTypeTests: XCTestCase {
     }
 
     func testCustomType() {
-        let newType = ActiveType.custom(pattern: "\\sare\\b")
+        let newType = ActiveType.custom(pattern: "\\sare\\b", range: nil)
         label.enabledTypes.append(newType)
 
         label.text = "we are one"
@@ -225,7 +225,7 @@ class ActiveTypeTests: XCTestCase {
     
     func testConfigureLinkAttributes() {
         // Customize label
-        let newType = ActiveType.custom(pattern: "\\sare\\b")
+        let newType = ActiveType.custom(pattern: "\\sare\\b", range: nil)
         label.customize { label in
             label.enabledTypes = [newType]
             
@@ -279,8 +279,8 @@ class ActiveTypeTests: XCTestCase {
     }
     
     func testRemoveHandleCustom() {
-        let newType1 = ActiveType.custom(pattern: "\\sare1\\b")
-        let newType2 = ActiveType.custom(pattern: "\\sare2\\b")
+        let newType1 = ActiveType.custom(pattern: "\\sare1\\b", range: nil)
+        let newType2 = ActiveType.custom(pattern: "\\sare2\\b", range: nil)
         
         label.handleCustomTap(for: newType1, handler: {_ in })
         label.handleCustomTap(for: newType2, handler: {_ in })
@@ -377,7 +377,7 @@ class ActiveTypeTests: XCTestCase {
     }
 
     func testOnlyCustomEnabled() {
-        let newType = ActiveType.custom(pattern: "\\sare\\b")
+        let newType = ActiveType.custom(pattern: "\\sare\\b", range: nil)
         label.enabledTypes = [newType]
 
         label.text = "http://www.google.com  are #hello"
