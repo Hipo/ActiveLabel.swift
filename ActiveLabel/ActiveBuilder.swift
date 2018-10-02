@@ -49,7 +49,7 @@ struct ActiveBuilder {
             let word = nsstring.substring(with: match.range)
                 .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
 
-            guard let maxLength = maximumLength, word.characters.count > maxLength else {
+            guard let maxLength = maximumLength, word.count > maxLength else {
                 let range = maximumLength == nil ? match.range : (text as NSString).range(of: word)
                 let element = ActiveElement.url(original: word, trimmed: word, url: match.url)
                 elements.append((range, element, type))
