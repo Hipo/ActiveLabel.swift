@@ -403,4 +403,33 @@ class ActiveTypeTests: XCTestCase {
 
         XCTAssertNotEqual(text.characters.count, label.text!.characters.count)
     }
+    
+    func testStringTrimmingURLShorterThanLimit() {
+        let text = "Tweet with short url: https://hello.co"
+        label.urlMaximumLength = 30
+        label.text = text
+        
+        XCTAssertEqual(text, label.text!)
+    }
+    
+    func testStringTrimmingURLLongerThanLimit() {
+        let trimLimit = 30
+        let url = "https://twitter.com/twicket_app/status/649678392372121601"
+        let trimmedURL = url.trim(to: trimLimit)
+        let text = "Tweet with long url: \(url)"
+        label.urlMaximumLength = trimLimit
+        label.text = text
+        
+        
+        XCTAssertNotEqual(text.characters.count, label.text!.characters.count)
+        
+        switch activeElements.first! {
+        case .url(let original, let trimmed, _):
+            XCTAssertEqual(original, url)
+            XCTAssertEqual(trimmed, trimmedURL)
+        default:
+            XCTAssert(false)
+        }
+        
+    }
 }

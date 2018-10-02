@@ -56,16 +56,16 @@ class ViewController: UIViewController {
             label.customColor[customType2] = UIColor.magenta
             label.customSelectedColor[customType2] = UIColor.green
             
-            label.configureLinkAttribute = { (type, attributes, isSelected) in
-                var atts = attributes
-                switch type {
-                case customType3:
-                    atts[NSFontAttributeName] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 14)
-                default: ()
-                }
-                
-                return atts
-            }
+//            label.configureLinkAttribute = { (type, attributes, isSelected) in
+//                var atts = attributes
+//                switch type {
+//                case customType3:
+//                    atts[NSFontAttributeName] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 14)
+//                default: ()
+//                }
+//
+//                return atts
+//            }
             
             label.customColor[customType4] = UIColor.yellow
             label.customSelectedColor[customType4] = UIColor.green
